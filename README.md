@@ -4,6 +4,24 @@ This repo contains the starter code for the Route Planning project.
 
 <img src="map.png" width="600" height="450" />
 
+
+## Instructions to build in Docker (By @Patrick)
+1. cd into the cloned project
+2. Build the docker container
+```
+docker build --tag 'cpp-dev-env' .
+```
+3.
+Allow docker to use x11
+See: https://ros-developer.com/2017/11/08/docker/
+```
+xhost +local:docker
+```
+3. Run the docker container as shell and mount the current working directory to /src as well as the x11 host
+```
+docker run -it --mount source="$(pwd)",target="/src",type=bind --mount source="/tmp/.X11-unix",target="/tmp/.X11-unix",type=bind -e DISPLAY=$DISPLAY -e QT_X11_NO_MITSHM=1 --network=host --privileged cpp-dev-env
+```
+
 ## Cloning
 
 When cloning this project, be sure to use the `--recurse-submodules` flag. Using HTTPS:
