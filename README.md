@@ -12,28 +12,46 @@ This repo contains the starter code for the Route Planning project.
 docker build --tag 'cpp-dev-env' .
 ```
 3.
-Allow docker to use x11
+To use x11 inside docker on a mac see:
+https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display
+
+This might not be necessary:
 See: https://ros-developer.com/2017/11/08/docker/
 ```
 xhost +local:docker
 ```
-3. Run the docker container as shell and mount the current working directory to /src as well as the x11 host
+
+Here are  the steps to prepare a socket for x11
+3.1 Install socat
 ```
-docker run -it --mount source="$(pwd)",target="/src",type=bind --mount source="/tmp/.X11-unix",target="/tmp/.X11-unix",type=bind -e DISPLAY=$DISPLAY -e QT_X11_NO_MITSHM=1 --network=host --privileged cpp-dev-env
+brew install socat
+````
+3.2 Make sure that nothing runs on port 6000 and run x11 on that port:
+```
+lsof -i TCP:6000
+socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
+````
+(Keep that terminal open)
+
+
+4. Finally run the docker container as shell and mount the current working directory to /CppND-Route-Planning_Project and let it connect to x11
+```
+docker run -it --mount source="$(pwd)",target="/CppND-Route-Planning_Project",type=bind -e DISPLAY=docker.for.mac.host.internal:0 cpp-dev-env 
 ```
 
 ## Cloning
 
 When cloning this project, be sure to use the `--recurse-submodules` flag. Using HTTPS:
 ```
-git clone https://github.com/udacity/CppND-Route-Planning-Project.git --recurse-submodules
+git clone https://github.com/paluchs/CppND-Route-Planning-Project.git --recurse-submodules
 ```
 or with SSH:
 ```
-git clone git@github.com:udacity/CppND-Route-Planning-Project.git --recurse-submodules
+git clone git@github.com:paluchs/CppND-Route-Planning-Project.git --recurse-submodules
 ```
 
 ## Dependencies for Running Locally
+@Patrick: These are already installed and setup in the docker container. No need to install anything
 * cmake >= 3.11.3
   * All OSes: [click here for installation instructions](https://cmake.org/install/)
 * make >= 4.1 (Linux, Mac), 3.81 (Windows)
