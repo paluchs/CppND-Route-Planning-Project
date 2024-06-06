@@ -16,16 +16,19 @@ To use x11 inside docker on a mac see:
 https://stackoverflow.com/questions/37826094/xt-error-cant-open-display-if-using-default-display
 
 This might not be necessary:
+
 See: https://ros-developer.com/2017/11/08/docker/
 ```
 xhost +local:docker
 ```
 
 Here are  the steps to prepare a socket for x11
+
 3.1 Install socat
 ```
 brew install socat
 ````
+
 3.2 Make sure that nothing runs on port 6000 and run x11 on that port:
 ```
 lsof -i TCP:6000
