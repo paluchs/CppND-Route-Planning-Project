@@ -24,17 +24,17 @@ xhost +local:docker
 
 Here are  the steps to prepare a socket for x11
 
-3.1 Install socat
-```
-brew install socat
-````
+  3.1 Install socat
+  ```
+  brew install socat
+  ````
 
-3.2 Make sure that nothing runs on port 6000 and run x11 on that port:
-```
-lsof -i TCP:6000
-socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
-````
-(Keep that terminal open)
+  3.2 Make sure that nothing runs on port 6000 and run x11 on that port:
+  ```
+  lsof -i TCP:6000
+  socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
+  ````
+  (Keep that terminal open)
 
 
 4. Finally run the docker container as shell and mount the current working directory to /CppND-Route-Planning_Project and let it connect to x11
@@ -52,23 +52,6 @@ or with SSH:
 ```
 git clone git@github.com:paluchs/CppND-Route-Planning-Project.git --recurse-submodules
 ```
-
-## Dependencies for Running Locally
-@Patrick: These are already installed and setup in the docker container. No need to install anything
-* cmake >= 3.11.3
-  * All OSes: [click here for installation instructions](https://cmake.org/install/)
-* make >= 4.1 (Linux, Mac), 3.81 (Windows)
-  * Linux: make is installed by default on most Linux distros
-  * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
-  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
-* gcc/g++ >= 7.4.0
-  * Linux: gcc / g++ is installed by default on most Linux distros
-  * Mac: same instructions as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
-  * Windows: recommend using [MinGW](http://www.mingw.org/)
-* IO2D
-  * Installation instructions for all operating systems can be found [here](https://github.com/cpp-io2d/P0267_RefImpl/blob/master/BUILDING.md)
-  * This library must be built in a place where CMake `find_package` will be able to find it
- 
 
 ## Compiling and Running
 
@@ -98,6 +81,30 @@ The testing executable is also placed in the `build` directory. From within `bui
 ```
 ./test
 ```
+
+## Setting up VS Code
+- Install the Dev Containers extenstion
+- Install the C/C++ and the C/C++ Extension Pack 
+- Open the folder containing the project
+
+
+# Documentation from Udacity that should not be necessary with the docker setup
+## Dependencies for Running Locally
+@Patrick: These are already installed and setup in the docker container. No need to install anything
+* cmake >= 3.11.3
+  * All OSes: [click here for installation instructions](https://cmake.org/install/)
+* make >= 4.1 (Linux, Mac), 3.81 (Windows)
+  * Linux: make is installed by default on most Linux distros
+  * Mac: [install Xcode command line tools to get make](https://developer.apple.com/xcode/features/)
+  * Windows: [Click here for installation instructions](http://gnuwin32.sourceforge.net/packages/make.htm)
+* gcc/g++ >= 7.4.0
+  * Linux: gcc / g++ is installed by default on most Linux distros
+  * Mac: same instructions as make - [install Xcode command line tools](https://developer.apple.com/xcode/features/)
+  * Windows: recommend using [MinGW](http://www.mingw.org/)
+* IO2D
+  * Installation instructions for all operating systems can be found [here](https://github.com/cpp-io2d/P0267_RefImpl/blob/master/BUILDING.md)
+  * This library must be built in a place where CMake `find_package` will be able to find it
+
 
 ## Troubleshooting
 * Some students have reported issues in cmake to find io2d packages, make sure you have downloaded [this](https://github.com/cpp-io2d/P0267_RefImpl/blob/master/BUILDING.md#xcode-and-libc).

@@ -18,7 +18,8 @@ RUN apt-get update && apt-get -y --no-install-recommends install \
     libcairo2-dev \
     libgraphicsmagick1-dev \
     libpng-dev \
-    catch
+    catch \
+    gdb
 
 # Install io2d
 RUN git clone https://github.com/cpp-io2d/P0267_RefImpl
