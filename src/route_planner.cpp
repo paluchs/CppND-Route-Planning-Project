@@ -23,8 +23,7 @@ RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, floa
 // - Node objects have a distance method to determine the distance to another node.
 
 float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
-    float hValue = node->distance(*end_node);
-    return hValue;
+    return node->distance(*end_node);
 }
 
 // TODO 4: Complete the AddNeighbors method to expand the current node by adding all unvisited neighbors to the open list.
@@ -36,9 +35,10 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
     current_node->FindNeighbors();
+
     for (RouteModel::Node* neighbor : current_node->neighbors) {
         neighbor->parent = current_node;
-        neighbor->g_value = current_node->distance(*neighbor);
+        neighbor->g_value = current_node->g_value + current_node->distance(*neighbor);
         neighbor->h_value = CalculateHValue(neighbor);
         neighbor->visited = true;
         open_list.push_back(neighbor);
@@ -57,11 +57,11 @@ RouteModel::Node *RoutePlanner::NextNode() {
         return (a->g_value + a->h_value) > (b->g_value + b->h_value);
     });
 
-    RouteModel::Node* new_node = open_list.back();
+    RouteModel::Node* next_node = open_list.back();
 
     open_list.pop_back();
 
-    return new_node;
+    return next_node;
 }
 
 
@@ -106,5 +106,21 @@ void RoutePlanner::AStarSearch() {
     RouteModel::Node *current_node = nullptr;
 
     // TODO: Implement your solution here.
+    start_node->visited = true;
+    start_node->g_value = 0.0f;
+    start_node->h_value = CalculateHValue(start_node);
+    open_list.push_back(start_node);
 
+    while (open_list.size() > 0) {
+        current_node = NextNode();
+
+        if (current_node->distance(*end_node) == 0) {
+            m_Model.path = ConstructFinalPath(current_node);
+            return;
+        } 
+      
+      	AddNeighbors(current_node); 
+    }
+
+    std::cout << "Could not find a valid route!\n";
 }
