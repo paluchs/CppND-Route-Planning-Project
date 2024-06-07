@@ -1,5 +1,6 @@
 #include "route_planner.h"
 #include <algorithm>
+#include <vector>
 
 RoutePlanner::RoutePlanner(RouteModel &model, float start_x, float start_y, float end_x, float end_y): m_Model(model) {
     // Convert inputs to percentage:
@@ -34,7 +35,14 @@ float RoutePlanner::CalculateHValue(RouteModel::Node const *node) {
 // - For each node in current_node.neighbors, add the neighbor to open_list and set the node's visited attribute to true.
 
 void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
-
+    current_node->FindNeighbors();
+    for (RouteModel::Node* neighbor : current_node->neighbors) {
+        neighbor->parent = current_node;
+        neighbor->g_value = current_node->distance(*neighbor);
+        neighbor->h_value = CalculateHValue(neighbor);
+        neighbor->visited = true;
+        open_list.push_back(neighbor);
+    }
 }
 
 
@@ -44,9 +52,16 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Create a pointer to the node in the list with the lowest sum.
 // - Remove that node from the open_list.
 // - Return the pointer.
-
 RouteModel::Node *RoutePlanner::NextNode() {
+    std::sort(open_list.begin(), open_list.end(), [](const RouteModel::Node* a, const RouteModel::Node* b) {
+        return (a->g_value + a->h_value) > (b->g_value + b->h_value);
+    });
 
+    RouteModel::Node* new_node = open_list.back();
+
+    open_list.pop_back();
+
+    return new_node;
 }
 
 
