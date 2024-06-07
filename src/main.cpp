@@ -27,6 +27,13 @@ static std::optional<std::vector<std::byte>> ReadFile(const std::string &path)
     return std::move(contents);
 }
 
+float PromptCoordinate(std::string coordName, std::string pointType) {
+    float coord;
+    std::cout << "Enter the " << coordName << " of your " << pointType << " point: ";
+    std::cin >> coord;
+    return coord;
+}
+
 int main(int argc, const char **argv)
 {    
     std::string osm_data_file = "";
@@ -55,6 +62,10 @@ int main(int argc, const char **argv)
     // TODO 1: Declare floats `start_x`, `start_y`, `end_x`, and `end_y` and get
     // user input for these values using std::cin. Pass the user input to the
     // RoutePlanner object below in place of 10, 10, 90, 90.
+    float start_x = PromptCoordinate("longitude", "starting");
+    float start_y = PromptCoordinate("latitude", "starting");
+    float end_x = PromptCoordinate("longitude", "end");
+    float end_y = PromptCoordinate("latitude", "end");
 
     // Build Model.
     RouteModel model{osm_data};
